@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Quiz Master</title>
+    <style>
+        * {
+            box-sizing: border-box;
+        }
+
+        body {
+            margin: 0;
+            font-family: Arial, sans-serif;
+            height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            background: radial-gradient(circle at top, #1e293b, #020617);
+            color: white;
+            overflow: hidden;
+        }
+
+        body::before {
+            content: "";
+            position: absolute;
+            width: 500px;
+            height: 500px;
+            background: radial-gradient(circle, #3b82f6, transparent);
+            top: -100px;
+            left: -100px;
+            filter: blur(120px);
+        }
+
+        .container {
+            text-align: center;
+            z-index: 2;
+        }
+
+        .glow {
+            font-size: 64px;
+            margin-bottom: 10px;
+            background: linear-gradient(90deg, #3b82f6, #10b981);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            text-shadow: 0 0 20px rgba(59, 130, 246, 0.5);
+        }
+
+        .tagline {
+            color: #cbd5f5;
+            margin-bottom: 40px;
+            font-size: 18px;
+        }
+
+        .actions {
+            display: flex;
+            justify-content: center;
+            gap: 20px;
+        }
+
+        .btn {
+            padding: 14px 30px;
+            border-radius: 8px;
+            border: none;
+            font-size: 16px;
+            cursor: pointer;
+            transition: 0.3s;
+            text-decoration: none;
+        }
+
+        .primary {
+            background: linear-gradient(135deg, #3b82f6, #2563eb);
+            color: white;
+            box-shadow: 0 0 15px rgba(59, 130, 246, 0.6);
+        }
+
+        .primary:hover {
+            transform: translateY(-3px) scale(1.05);
+            box-shadow: 0 0 30px rgba(59, 130, 246, 0.9);
+        }
+
+        .secondary {
+            background: transparent;
+            border: 1px solid #10b981;
+            color: #10b981;
+        }
+
+        .secondary:hover {
+            background: #10b981;
+            color: black;
+            transform: translateY(-3px);
+
+        }
+        
+        .flash {
+            background: rgba(239, 68, 68, 0.15);
+            border: 1px solid rgba(239, 68, 68, 0.4);
+            color: #fca5a5;
+            padding: 10px 14px;
+            border-radius: 6px;
+            margin-bottom: 20px;
+            font-size: 14px;
+            text-align: center;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+            {% with messages = get_flashed_messages() %}
+            {% if messages %}
+            {% for message in messages %}
+            <div class="flash">{{ message }}</div>
+            {% endfor %}
+            {% endif %}
+            {% endwith %}
+        <h1 class="glow">Quiz Master</h1>
+        <p class="tagline">Quizzes for IITM BS. Grow your understanding</p>
+        <div class="actions">
+            <a href="{{ url_for('login') }}" class="btn primary">Login</a>
+            <a href="{{ url_for('register') }}" class="btn secondary">Register</a>
+        </div>
+    </div>
+</body>
+</html>

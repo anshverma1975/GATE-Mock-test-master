@@ -5,23 +5,25 @@ from controller.models import User
 
 
 app = Flask(__name__, template_folder="templates", static_folder="static")
-
-app.secret_key = "quiz_master_dev_secret_123"
 app.config.from_object(Config)
 db.init_app(app)
 with app.app_context():
     db.create_all()
 
 
-
 @app.route("/")
+def landing():
+    if "user_id" in session:
+        return redirect(url_for("home"))
+    return render_template("landing.html")
+@app.route("/home")
+@app.route("/dashboard")
 def home():
     if "user_id" not in session:
-        return redirect(url_for("login"))
-    
-    return f"Welcome {session['username']}"
+        flash("Please login first")
+        return redirect(url_for("landing"))
+    return render_template("user_dashboard.html")
 
-    #return render_template("user_dashboard.html")   
 
 
 #loginn route
