@@ -1,0 +1,206 @@
+body {
+    font-family: Arial, sans-serif;
+    background: #f4f6f8;
+    margin: 0;
+}
+
+/* ================= NAVBAR ================= */
+.navbar {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background: #222;
+    color: white;
+    padding: 12px 30px;
+}
+
+.logo {
+    font-weight: bold;
+    font-size: 18px;
+    color: white;
+}
+
+.nav-center {
+    display: flex;
+    gap: 30px;
+}
+
+.nav-center a {
+    color: white;
+    text-decoration: none;
+    padding-bottom: 3px;
+}
+
+.nav-center a:hover {
+    border-bottom: 2px solid white;
+}
+
+.nav-center .active {
+    border-bottom: 2px solid #00bfff;
+}
+
+/* ================= PROFILE ================= */
+.profile {
+    position: relative;
+    cursor: pointer;
+    color: white;
+}
+
+.dropdown {
+    display: none;
+    position: absolute;
+    right: 0;
+    top: 120%;
+    background: white;
+    color: black;
+    min-width: 140px;
+    border-radius: 6px;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.2);
+    overflow: hidden;
+    z-index: 10;
+}
+
+.dropdown a {
+    display: block;
+    padding: 10px;
+    text-decoration: none;
+    color: black;
+}
+
+.dropdown a:hover {
+    background: #f0f0f0;
+}
+
+.profile:hover .dropdown {
+    display: block;
+}
+
+/* ================= FLASH ================= */
+.flash-container {
+    max-width: 900px;
+    margin: 15px auto;
+    padding: 0 10px;
+}
+
+.flash {
+    background: #fee2e2;
+    border: 1px solid #fca5a5;
+    color: #991b1b;
+    padding: 10px 14px;
+    border-radius: 6px;
+}
+
+/* ================= MAIN CONTENT ================= */
+.container {
+    max-width: 1000px;
+    margin: 30px auto;
+    background: white;
+    padding: 20px;
+    border-radius: 12px;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.06);
+}
+
+/* ================= STATS ================= */
+.stats {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 15px;
+    margin-bottom: 30px;
+}
+
+.card {
+    background: white;
+    padding: 20px;
+    text-align: center;
+    border-radius: 10px;
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
+    font-weight: bold;
+}
+
+.card span {
+    display: block;
+    font-size: 24px;
+    margin-top: 10px;
+}
+
+/* ================= SECTION ================= */
+.section {
+    background: white;
+    padding: 20px;
+    margin-bottom: 20px;
+    border-radius: 10px;
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
+}
+
+/* ================= MANAGE GRID ================= */
+.manage-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 20px;
+}
+
+.manage-card {
+    background: #fafafa;
+    padding: 20px;
+    border-radius: 10px;
+    text-align: center;
+    border: 1px solid #ddd;
+}
+
+.manage-card p {
+    font-size: 14px;
+    color: #555;
+    margin-bottom: 15px;
+}
+
+/* ================= BUTTONS ================= */
+.actions button {
+    padding: 8px 12px;
+    border: none;
+    border-radius: 5px;
+    background: #007bff;
+    color: white;
+    cursor: pointer;
+}
+
+.actions button:hover {
+    background: #0056b3;
+}
+
+/* ================= ACTIVITY ================= */
+.activity-item {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 12px 10px;
+    border-bottom: 1px solid #eee;
+}
+
+.tag {
+    padding: 4px 8px;
+    border-radius: 5px;
+    font-size: 12px;
+    color: white;
+}
+
+.quiz_created {
+    background: #007bff;
+}
+
+.subject {
+    background: #28a745;
+}
+
+.attempt {
+    background: #6f42c1;
+}
+
+.text {
+    flex: 1;
+    margin-left: 10px;
+}
+
+.time {
+    font-size: 12px;
+    color: #777;
+}

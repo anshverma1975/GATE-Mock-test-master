@@ -57,7 +57,7 @@ class AttemptAnswer(db.Model):
     attempt_id = db.Column(db.Integer, db.ForeignKey("attempts.id"), nullable=False)
     question_id = db.Column(db.Integer, db.ForeignKey("questions.id"), nullable=False)
 
-    selected_option = db.Column(db.Integer)  # 1, 2, 3, 4
+    selected_option = db.Column(db.Integer)  
 
     __table_args__ = (
         db.UniqueConstraint('attempt_id', 'question_id', name='unique_attempt_question'),
@@ -66,7 +66,7 @@ class AttemptAnswer(db.Model):
 class Activity(db.Model):
     __tablename__ = "activities"
     id = db.Column(db.Integer, primary_key=True)
-    type = db.Column(db.String(50), nullable=False)      # "attempt" | "quiz_created"
-    message = db.Column(db.String(300), nullable=False)  # e.g. "Alice scored 8/10 on Python Basics"
+    type = db.Column(db.String(50), nullable=False)      
+    message = db.Column(db.String(300), nullable=False)  
     timestamp = db.Column(db.DateTime, default=datetime.utcnow)
     user_id = db.Column(db.Integer, db.ForeignKey("users.id"), nullable=True)

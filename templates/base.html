@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/base.css') }}">
+    <meta charset="UTF-8">
+    <title>{% block title %}Quiz Master{% endblock %}</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+</head>
+<body>
+    <nav class="navbar">
+        <div class="nav-left">
+            <span class="logo">Quiz Master</span>
+        </div>
+
+        <div class="nav-center">
+            <a href="{{ url_for('home') }}" class="{% if request.endpoint == 'home' %}active{% endif %}">
+                Home
+            </a>
+            <a href="#">
+                Subjects
+            </a>
+            <a href="#">
+                Quizzes
+            </a>
+            <a href="#">
+                Results
+            </a>
+            {% if session.get('role') == 'admin' %}
+            <a href="{{ url_for('admin_dashboard') }}"
+                class="{% if request.endpoint == 'admin_dashboard' %}active{% endif %}">
+                Admin
+            </a>
+            {% endif %}
+        </div>
+
+        <div class="nav-right">
+            <div class="profile">
+                {{ session.get('username', 'User') }} ▼
+
+                <div class="dropdown">
+                    <a href="#">Profile</a>
+                    <a href="{{ url_for('logout') }}">Logout</a>
+                </div>
+            </div>
+        </div>
+
+    </nav>
+
+    <div class="flash-container">
+        {% with messages = get_flashed_messages() %}
+        {% if messages %}
+        {% for message in messages %}
+        <div class="flash">{{ message }}</div>
+        {% endfor %}
+        {% endif %}
+        {% endwith %}
+    </div>
+
+    <div class="container">
+        {% block content %}
+        {% endblock %}
+    </div>
+</body>
+</html>

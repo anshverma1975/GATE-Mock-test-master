@@ -1,0 +1,94 @@
+{% extends "base.html" %}
+
+{% block title %}Student Dashboard{% endblock %}
+
+{% block content %}
+
+<h1>Student Dashboard</h1>
+
+<!-- STATS -->
+<div class="stats">
+
+    <div class="card">Subjects<br><span>{{ subjects_count }}</span></div>
+    <div class="card">Quizzes<br><span>{{ quizzes_count }}</span></div>
+    <div class="card">Questions<br><span>{{ questions_count }}</span></div>
+    <div class="card">Attempted<br><span>{{ attempted_count }}</span></div>
+
+</div>
+
+<!-- EXPLORE SECTION -->
+<div class="section">
+    <h2>Explore</h2>
+
+    <div class="manage-grid">
+
+        <div class="manage-card">
+            <h3>Subjects</h3>
+            <p>Browse all available subjects</p>
+            <div class="actions">
+                <button onclick="location.href='#'">View</button>
+            </div>
+        </div>
+
+        <div class="manage-card">
+            <h3>Quizzes</h3>
+            <p>Attempt quizzes by topic</p>
+            <div class="actions">
+                <button onclick="location.href='#'">View</button>
+            </div>
+        </div>
+
+        <div class="manage-card">
+            <h3>Results</h3>
+            <p>Check your performance</p>
+            <div class="actions">
+                <button onclick="location.href='#'">View</button>
+            </div>
+        </div>
+
+    </div>
+</div>
+
+<!-- PERFORMANCE -->
+<div class="section">
+    <h2>Performance Snapshot</h2>
+
+    <div class="manage-grid">
+
+        <div class="manage-card">
+            <h3>Average Score</h3>
+            <p style="font-size: 24px; font-weight: bold;">{{ avg_score }}%</p>
+        </div>
+
+        <div class="manage-card">
+            <h3>Best Subject</h3>
+            <p style="font-size: 18px;">{{ best_subject }}</p>
+        </div>
+
+        <div class="manage-card">
+            <h3>Weak Area</h3>
+            <p style="font-size: 18px;">{{ weak_subject }}</p>
+        </div>
+
+    </div>
+</div>
+
+<!-- RECENT ACTIVITY -->
+<div class="section">
+    <h2>Recent Activity</h2>
+
+    {% for a in activities %}
+    <div class="activity-item">
+
+        <span class="tag {{ a.type }}">{{ a.type|capitalize }}</span>
+
+        <span class="text">{{ a.message }}</span>
+
+        <span class="time">{{ a.timestamp }}</span>
+
+    </div>
+    {% endfor %}
+
+</div>
+
+{% endblock %}
