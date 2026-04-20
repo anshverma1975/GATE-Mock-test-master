@@ -4,7 +4,6 @@ body {
     margin: 0;
 }
 
-/* ================= NAVBAR ================= */
 .navbar {
     display: flex;
     justify-content: space-between;
@@ -39,18 +38,18 @@ body {
     border-bottom: 2px solid #00bfff;
 }
 
-/* ================= PROFILE ================= */
 .profile {
     position: relative;
     cursor: pointer;
     color: white;
+    padding-bottom: 2px;
 }
 
 .dropdown {
     display: none;
     position: absolute;
     right: 0;
-    top: 120%;
+    top: 100%;
     background: white;
     color: black;
     min-width: 140px;
@@ -75,7 +74,6 @@ body {
     display: block;
 }
 
-/* ================= FLASH ================= */
 .flash-container {
     max-width: 900px;
     margin: 15px auto;
@@ -90,7 +88,6 @@ body {
     border-radius: 6px;
 }
 
-/* ================= MAIN CONTENT ================= */
 .container {
     max-width: 1000px;
     margin: 30px auto;
@@ -100,7 +97,6 @@ body {
     box-shadow: 0 2px 10px rgba(0, 0, 0, 0.06);
 }
 
-/* ================= STATS ================= */
 .stats {
     display: grid;
     grid-template-columns: repeat(4, 1fr);
@@ -123,7 +119,6 @@ body {
     margin-top: 10px;
 }
 
-/* ================= SECTION ================= */
 .section {
     background: white;
     padding: 20px;
@@ -132,7 +127,6 @@ body {
     box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
 }
 
-/* ================= MANAGE GRID ================= */
 .manage-grid {
     display: grid;
     grid-template-columns: repeat(3, 1fr);
@@ -153,7 +147,6 @@ body {
     margin-bottom: 15px;
 }
 
-/* ================= BUTTONS ================= */
 .actions button {
     padding: 8px 12px;
     border: none;
@@ -167,13 +160,17 @@ body {
     background: #0056b3;
 }
 
-/* ================= ACTIVITY ================= */
+
 .activity-item {
     display: flex;
     align-items: center;
     justify-content: space-between;
     padding: 12px 10px;
     border-bottom: 1px solid #eee;
+}
+
+.system {
+    background: #ff9800;
 }
 
 .tag {
@@ -186,6 +183,7 @@ body {
 .quiz_created {
     background: #007bff;
 }
+
 
 .subject {
     background: #28a745;

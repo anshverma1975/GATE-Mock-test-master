@@ -1,1 +1,85 @@
-print("supp admin")
+{% extends "base.html" %}
+{% block title %}Admin Dashboard{% endblock %}
+{% block content %}
+
+<h1>Admin Dashboard</h1>
+<div class="stats">
+    <div class="card">
+        Subjects
+        <span>{{ subjects_count }}</span>
+    </div>
+
+    <div class="card">
+        Quizzes
+        <span>{{ quizzes_count }}</span>
+    </div>
+
+    <div class="card">
+        Questions
+        <span>{{ questions_count }}</span>
+    </div>
+
+    <div class="card">Users<span>{{ users_count }}</span></div>
+
+</div>
+
+<div class="section">
+    <h2>Management Panel</h2>
+
+    <div class="manage-grid">
+
+        <div class="manage-card">
+            <h3>Subjects</h3>
+            <p>Create and manage subjects</p>
+            <div class="actions">
+                <button onclick="location.href='#'">Manage</button>
+            </div>
+        </div>
+
+        <div class="manage-card">
+            <h3>Quizzes</h3>
+            <p>Create quizzes under subjects</p>
+            <div class="actions">
+                <button onclick="location.href='#'">Manage</button>
+            </div>
+        </div>
+
+        <div class="manage-card">
+            <h3>Questions</h3>
+            <p>Add MCQs to quizzes</p>
+            <div class="actions">
+                <button onclick="location.href='#'">Manage</button>
+            </div>
+        </div>
+
+    </div>
+</div>
+
+<div class="section">
+    <h2>Recent Activity</h2>
+
+    {% if activities %}
+    {% for a in activities %}
+    <div class="activity-item">
+
+        <span class="tag {{ a.type }}">
+            {{ a.type|capitalize }}
+        </span>
+
+        <span class="text">
+            {{ a.message }}
+        </span>
+
+        <span class="time">
+            {{ a.timestamp.strftime('%H:%M') }}
+        </span>
+
+    </div>
+    {% endfor %}
+    {% else %}
+    <p>No recent activity</p>
+    {% endif %}
+
+</div>
+
+{% endblock %}
