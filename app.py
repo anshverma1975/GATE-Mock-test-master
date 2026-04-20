@@ -19,7 +19,6 @@ with app.app_context():
 
 #to make sure only admins can enter the admin dashboard and its subsequent pages
 def admin_access():
-    print("SESSION:", dict(session))
     if "user_id" not in session:
         flash("Please login first")
         return False
@@ -28,7 +27,6 @@ def admin_access():
         flash("You are not authorized to access this page")
         return False
 
-    print("RETURNING TRUE")
     return True
 
 @app.route("/")
@@ -266,8 +264,188 @@ def update_subject(id):
     flash("Subject updated successfully")
     return redirect(url_for("admin_subjects"))
 
+@app.route("/admin/quizzes")
+def admin_quizzes():
+    if not admin_access():
+        return redirect(url_for("landing"))
+    quizzes = Quiz.query.order_by(Quiz.created_at.desc()).all()
+    quiz_data = []
+    for q in quizzes:
+        quiz_data.append({
+            "id": q.id,
+            "title": q.title,
+            "subject": q.subject.name,
+            "question_count": len(q.questions),
+            "created": q.created_at.strftime("%Y-%m-%d")
+        })
+
+    return render_template("admin_quizzes.html", quizzes=quiz_data)
+
+#ye wala for making using the add new quiz button in admin quiz dashboard
+@app.route("/admin/quizzes/new")
+def new_quiz():
+    if not admin_access():
+        return redirect(url_for("landing"))
+
+    subjects = Subject.query.all()
+    if not subjects:
+        flash("Create a subject first")
+        return redirect(url_for("admin_subjects"))
+    return render_template("create_quiz.html", subjects=subjects)
+
+#this is to actually create the new quiz
+@app.route("/admin/quizzes/create", methods=["POST"])
+def create_quiz():
+    if not admin_access():
+        return redirect(url_for("landing"))
+
+    title = request.form.get("title")
+    subject_id = int(request.form.get("subject_id"))
+
+    if not title or not subject_id:
+        flash("All fields required")
+        return redirect(url_for("new_quiz"))
+
+    quiz = Quiz(title=title, subject_id=subject_id)
+    db.session.add(quiz)
+    db.session.commit()
+
+    log_activity(
+        type="quiz",
+        message=f"Created quiz '{title}'",
+        user_id=session["user_id"]
+    )
+
+    flash("Quiz created")
+    return redirect(url_for("admin_quizzes"))
+
+#to delete quizzes
+@app.route("/admin/quizzes/delete/<int:id>", methods=["POST"])
+def delete_quiz(id):
+    if not admin_access():
+        return redirect(url_for("landing"))
+
+    quiz = Quiz.query.get_or_404(id)
+    title = quiz.title
+
+    db.session.delete(quiz)
+    db.session.commit()
+
+    log_activity(
+        type="quiz",
+        message=f"Deleted quiz '{title}'",
+        user_id=session["user_id"]
+    )
+
+    flash("Quiz deleted")
+    return redirect(url_for("admin_quizzes"))
 
 
+@app.route("/admin/quizzes/view/<int:id>")
+def view_quiz(id):
+    if not admin_access():
+        return redirect(url_for("home"))
 
+    quiz = Quiz.query.get_or_404(id)
+    return render_template("view_quiz.html", quiz=quiz)
+
+@app.route("/admin/quizzes/edit/<int:id>")
+def edit_quiz(id):
+    if not admin_access():
+        return redirect(url_for("home"))
+
+    quiz = Quiz.query.get_or_404(id)
+
+    return render_template("edit_quiz.html", quiz=quiz)
+
+@app.route("/admin/quizzes/<int:quiz_id>/add_question", methods=["POST"])
+def add_question(quiz_id):
+    if not admin_access():
+        return redirect(url_for("home"))
+
+    text = request.form.get("text")
+    option1 = request.form.get("option1")
+    option2 = request.form.get("option2")
+    option3 = request.form.get("option3")
+    option4 = request.form.get("option4")
+    correct = int(request.form.get("correct_option"))
+
+    if not text or not correct:
+        flash("Question and correct answer required")
+        return redirect(url_for("edit_quiz", id=quiz_id))
+
+    question = Question(
+        quiz_id=quiz_id,
+        question_text=text,
+        option1=option1,
+        option2=option2,
+        option3=option3,
+        option4=option4,
+        correct_option=correct
+    )
+
+    db.session.add(question)
+    db.session.commit()
+
+    flash("Question added")
+    return redirect(url_for("edit_quiz", id=quiz_id))
+
+@app.route("/admin/questions/delete/<int:id>", methods=["POST"])
+def delete_question(id):
+    if not admin_access():
+        return redirect(url_for("home"))
+
+    question = Question.query.get_or_404(id)
+    quiz_id = question.quiz_id
+
+    db.session.delete(question)
+    db.session.commit()
+
+    flash("Question deleted")
+    return redirect(url_for("view_quiz", id=quiz_id))
+
+@app.route("/admin/questions/edit/<int:id>", methods=["GET", "POST"])
+def edit_question(id):
+    if not admin_access():
+        return redirect(url_for("home"))
+
+    question = Question.query.get_or_404(id)
+
+    if request.method == "POST":
+        question.question_text = request.form.get("text")
+        question.option1 = request.form.get("option1")
+        question.option2 = request.form.get("option2")
+        question.option3 = request.form.get("option3")
+        question.option4 = request.form.get("option4")
+        question.correct_option = int(request.form.get("correct_option"))
+        question.marks = int(request.form.get("marks") or 1)
+
+        db.session.commit()
+
+        flash("Question updated successfully")
+        return redirect(url_for("view_quiz", id=question.quiz_id))
+
+    return render_template("edit_question.html", question=question)
+
+
+@app.route("/admin/questions/update/<int:id>", methods=["POST"])
+def update_question(id):
+    if not admin_access():
+        return redirect(url_for("home"))
+
+    question = Question.query.get_or_404(id)
+
+    question.question_text = request.form.get("text")
+    question.option1 = request.form.get("option1")
+    question.option2 = request.form.get("option2")
+    question.option3 = request.form.get("option3")
+    question.option4 = request.form.get("option4")
+    question.correct_option = int(request.form.get("correct_option"))
+    question.marks = int(request.form.get("marks", 1))
+
+    db.session.commit()
+
+    flash("Question updated successfully")
+    return redirect(url_for("edit_quiz", id=question.quiz_id))
 if __name__ == "__main__":
     app.run(debug=True) 

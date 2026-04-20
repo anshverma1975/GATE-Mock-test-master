@@ -1,0 +1,43 @@
+{% extends "base.html" %}
+{% block title %}Create Quiz{% endblock %}
+
+{% block content %}
+
+<div class="form-wrapper">
+
+    <div class="form-card">
+        <h2>Create Quiz</h2>
+        <p class="subtitle">Add a quiz under a subject</p>
+
+        <form method="POST" action="{{ url_for('create_quiz') }}">
+
+            <div class="input-group">
+                <label>Quiz Title</label>
+                <input type="text" name="title" required>
+            </div>
+
+            <div class="input-group">
+                <label>Subject</label>
+                <select name="subject_id" required>
+                    {% for s in subjects %}
+                    <option value="{{ s.id }}">{{ s.name }}</option>
+                    {% endfor %}
+                </select>
+            </div>
+
+            <div class="form-actions">
+                <button type="button" class="btn secondary" onclick="location.href='{{ url_for('admin_quizzes') }}'">
+                    Cancel
+                </button>
+
+                <button type="submit" class="btn primary">
+                    Save
+                </button>
+            </div>
+
+        </form>
+    </div>
+
+</div>
+
+{% endblock %}

@@ -1,0 +1,77 @@
+{% extends "base.html" %}
+{% block title %}Edit Quiz{% endblock %}
+
+{% block content %}
+
+<div class="container">
+
+    <div class="header">
+        <div>
+            <h1>{{ quiz.title }}</h1>
+            <p class="subtitle">Add questions to this quiz</p>
+        </div>
+    </div>
+
+    <div class="form-wrapper">
+
+        <div class="form-card">
+            <h2>Add Question</h2>
+            <p class="subtitle">Create a question for this quiz</p>
+
+            <form method="POST" action="{{ url_for('add_question', quiz_id=quiz.id) }}">
+
+                <div class="input-group">
+                    <label>Question</label>
+                    <textarea name="text" placeholder="Enter your question" required></textarea>
+                </div>
+
+                <div class="input-group">
+                    <label>Options</label>
+
+                    <div class="option">
+                        <input type="radio" name="correct_option" value="1" required>
+                        <input type="text" name="option1" placeholder="Option 1" required>
+                    </div>
+
+                    <div class="option">
+                        <input type="radio" name="correct_option" value="2">
+                        <input type="text" name="option2" placeholder="Option 2" required>
+                    </div>
+
+                    <div class="option">
+                        <input type="radio" name="correct_option" value="3">
+                        <input type="text" name="option3" placeholder="Option 3" required>
+                    </div>
+
+                    <div class="option">
+                        <input type="radio" name="correct_option" value="4">
+                        <input type="text" name="option4" placeholder="Option 4" required>
+                    </div>
+
+                    <small>Select the correct answer</small>
+                </div>
+
+                <div class="input-group">
+                    <label>Marks</label>
+                    <input type="number" name="marks" value="1" min="1">
+                </div>
+
+                <div class="form-actions">
+                    <button type="button" class="btn secondary"
+                        onclick="location.href='{{ url_for('admin_quizzes') }}'">
+                        Cancel
+                    </button>
+
+                    <button type="submit" class="btn primary">
+                        Save Question
+                    </button>
+                </div>
+
+            </form>
+        </div>
+
+    </div>
+
+</div>
+
+{% endblock %}

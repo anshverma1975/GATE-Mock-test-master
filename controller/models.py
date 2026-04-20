@@ -35,7 +35,7 @@ class Question(db.Model):
     option2 = db.Column(db.String(200), nullable=False)
     option3 = db.Column(db.String(200), nullable=False)
     option4 = db.Column(db.String(200), nullable=False)
-    correct_answer = db.Column(db.Integer, nullable=False)
+    correct_option = db.Column(db.Integer, nullable=False)
     marks = db.Column(db.Integer, nullable=False, default=1)
     quiz_id = db.Column(db.Integer, db.ForeignKey("quizzes.id"), nullable=False)
 

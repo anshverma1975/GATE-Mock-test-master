@@ -32,9 +32,7 @@
             <h3>Subjects</h3>
             <p>Create and manage subjects</p>
             <div class="actions">
-                <button onclick="location.href='{{ url_for('admin_subjects') }}'">
-                    Manage
-                </button>
+                <button onclick="location.href='{{ url_for('admin_subjects') }}'">Manage</button>
             </div>
         </div>
 
@@ -42,13 +40,13 @@
             <h3>Quizzes</h3>
             <p>Create quizzes under subjects</p>
             <div class="actions">
-                <button onclick="location.href='#'">Manage</button>
+                <button onclick="location.href='{{ url_for('admin_quizzes') }}'">Manage</button>
             </div>
         </div>
 
         <div class="manage-card">
-            <h3>Questions</h3>
-            <p>Add MCQs to quizzes</p>
+            <h3>Results</h3>
+            <p>Track attempts and scores</p>
             <div class="actions">
                 <button onclick="location.href='#'">Manage</button>
             </div>
