@@ -160,17 +160,12 @@ body {
     background: #0056b3;
 }
 
-
 .activity-item {
     display: flex;
     align-items: center;
     justify-content: space-between;
     padding: 12px 10px;
     border-bottom: 1px solid #eee;
-}
-
-.system {
-    background: #ff9800;
 }
 
 .tag {
@@ -180,10 +175,9 @@ body {
     color: white;
 }
 
-.quiz_created {
-    background: #007bff;
+.system {
+    background: #ff9800;
 }
-
 
 .subject {
     background: #28a745;
@@ -191,6 +185,10 @@ body {
 
 .attempt {
     background: #6f42c1;
+}
+
+.quiz_created {
+    background: #007bff;
 }
 
 .text {
@@ -201,4 +199,122 @@ body {
 .time {
     font-size: 12px;
     color: #777;
+}
+
+.header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 15px;
+}
+
+.table {
+    width: 100%;
+    border-collapse: collapse;
+    background: white;
+    border-radius: 8px;
+    overflow: hidden;
+}
+
+.table th,
+.table td {
+    padding: 12px;
+    border-bottom: 1px solid #eee;
+    text-align: left;
+}
+
+.table th {
+    background: #f8f9fa;
+}
+
+.table tr:hover {
+    background: #f9fbff;
+}
+
+.btn {
+    padding: 8px 14px;
+    border: none;
+    border-radius: 6px;
+    cursor: pointer;
+}
+
+.btn.primary {
+    background: #007bff;
+    color: white;
+}
+
+.btn.primary:hover {
+    background: #0056b3;
+}
+
+.btn.secondary {
+    background: #e0e0e0;
+    color: #333;
+}
+
+.btn.secondary:hover {
+    background: #c7c7c7;
+}
+
+.btn.danger {
+    background: #dc3545;
+    color: white;
+}
+
+.btn.danger:hover {
+    background: #a71d2a;
+}
+
+.btn.small {
+    padding: 5px 8px;
+    font-size: 13px;
+}
+
+
+.form-wrapper {
+    display: flex;
+    justify-content: center;
+    margin-top: 50px;
+}
+
+.form-card {
+    background: white;
+    padding: 30px;
+    width: 400px;
+    border-radius: 10px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+}
+
+.subtitle {
+    font-size: 14px;
+    color: #666;
+    margin-bottom: 20px;
+}
+
+.input-group {
+    margin-bottom: 20px;
+}
+
+.input-group label {
+    font-size: 14px;
+    color: #444;
+}
+
+.input-group input {
+    width: 100%;
+    padding: 10px;
+    margin-top: 6px;
+    border-radius: 6px;
+    border: 1px solid #ccc;
+    outline: none;
+}
+
+.input-group input:focus {
+    border-color: #007bff;
+}
+
+.form-actions {
+    display: flex;
+    justify-content: flex-end;
+    gap: 10px;
 }

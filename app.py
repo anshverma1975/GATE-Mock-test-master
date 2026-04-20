@@ -9,16 +9,25 @@ app.config.from_object(Config)
 db.init_app(app)
 with app.app_context():
     db.create_all()
-
     admin = User.query.filter_by(role="admin").first()
     if not admin: admin = User(username="admin", password="anshverma1975", role="admin")
     db.session.add(admin)
     db.session.commit()
-    #username = "admin"
-    #password = "anshverma1975"
-    #role = "admin"
+    # username = "admin"
+    # password = "anshverma1975"
+    # role = "admin"
 
+#to make sure only admins can enter the admin dashboard and its subsequent pages
+def admin_access():
+    if "user_id" not in session:
+        flash("Please login first")
+        return redirect(url_for("landing"))
 
+    if session.get("role") != "admin":
+        flash("You are not authorized to access this page")
+        return redirect(url_for("home"))
+
+    return True
 
 @app.route("/")
 def landing():
@@ -28,6 +37,7 @@ def landing():
         elif session.get("role") == "student":
             return redirect(url_for("home"))
     return render_template("landing.html")
+
 @app.route("/home")
 @app.route("/dashboard")
 def home():
@@ -144,6 +154,93 @@ def admin_dashboard():
     
 
     return render_template("admin_dashboard.html",users_count=users_count,subjects_count=subjects_count,quizzes_count=quizzes_count,questions_count=questions_count,activities=activities)
+
+
+
+@app.route('/admin/subjects')
+def admin_subjects():
+    if not admin_access():
+        return redirect(url_for("home"))
+
+    subjects = Subject.query.order_by(Subject.id.desc()).all()
+
+    subject_data = []
+    for s in subjects:
+        subject_data.append({
+            "id": s.id,
+            "name": s.name,
+            "description": s.description,
+            "quiz_count": len(s.quizzes),
+            "created": s.id  
+        })
+
+    return render_template("admin_subjects.html", subjects=subject_data)
+
+@app.route("/admin/subjects/new")
+def new_subject():
+    if not admin_access():
+        return redirect(url_for("landing"))
+    return render_template("create_subject.html")
+
+@app.route("/admin/subjects/create", methods=["POST"])
+def create_subject():
+    if not admin_access():
+        return redirect(url_for("landing"))
+
+    name = request.form.get("name")
+    description = request.form.get("description")
+
+    if not name:
+        flash("Subject name is required")
+        return redirect(url_for("new_subject"))
+
+    subject = Subject(name=name, description=description)
+    db.session.add(subject)
+    db.session.commit()
+
+    log_activity(
+        type="subject",
+        message=f"Created subject '{name}'",
+        user_id=session["user_id"]
+    )
+
+    flash("Subject created")
+    return redirect(url_for("admin_subjects"))
+
+@app.route("/admin/subjects/delete/<int:id>", methods=["POST"])
+def delete_subject(id):
+    if not admin_access():
+        return redirect(url_for("landing"))
+
+    subject = Subject.query.get_or_404(id)
+    name = subject.name
+
+    db.session.delete(subject)
+    db.session.commit()
+
+    log_activity(
+        type="subject",
+        message=f"Deleted subject '{name}'",
+        user_id=session["user_id"]
+    )
+
+    flash("Subject deleted")
+    return redirect(url_for("admin_subjects"))
+    
+
+@app.route("/admin/subjects/edit/<int:id>")
+def edit_subject(id):
+    if not admin_access():
+        return redirect(url_for("landing"))
+
+    subject = Subject.query.get_or_404(id)
+    return render_template("edit_subject.html", subject=subject)
+    
+
+
+
+
+
 
 
 if __name__ == "__main__":

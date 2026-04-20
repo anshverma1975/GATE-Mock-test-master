@@ -1,0 +1,42 @@
+{% extends "base.html" %}
+{% block title %}Add Subject{% endblock %}
+
+{% block content %}
+
+<div class="form-wrapper">
+
+    <div class="form-card">
+        <h2>Add Subject</h2>
+        <p class="subtitle">Create a new subject for quizzes</p>
+
+        <form method="POST" action="{{ url_for('create_subject') }}">
+
+            <div class="input-group">
+                <label>Subject Name</label>
+                <input type="text" name="name" placeholder="e.g. DBMS" required>
+            </div>
+
+            <div class="input-group">
+                <label>Description</label>
+                <input type="text" name="description" placeholder="Optional">
+            </div>
+
+            <div class="form-actions">
+
+                <button type="button" class="btn secondary" onclick="location.href='{{ url_for('admin_subjects') }}'">
+                    Cancel
+                </button>
+
+                <button type="submit" class="btn primary">
+                    Save
+                </button>
+
+            </div>
+
+        </form>
+
+    </div>
+
+</div>
+
+{% endblock %}
