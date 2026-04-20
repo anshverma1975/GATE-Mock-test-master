@@ -1,0 +1,41 @@
+{% extends "base.html" %}
+{% block title %}Edit Subject{% endblock %}
+{% block content %}
+
+<div class="form-wrapper">
+
+    <div class="form-card">
+        <h2>Edit Subject</h2>
+        <p class="subtitle">Modify subject details</p>
+
+        <form method="POST" action="{{ url_for('update_subject', id=subject.id) }}">
+
+            <div class="input-group">
+                <label>Subject Name</label>
+                <input type="text" name="name" value="{{ subject.name }}" required>
+            </div>
+
+            <div class="input-group">
+                <label>Description</label>
+                <input type="text" name="description" value="{{ subject.description }}">
+            </div>
+
+            <div class="form-actions">
+
+                <button type="button" class="btn secondary" onclick="location.href='{{ url_for('admin_subjects') }}'">
+                    Cancel
+                </button>
+
+                <button type="submit" class="btn primary">
+                    Update
+                </button>
+
+            </div>
+
+        </form>
+
+    </div>
+
+</div>
+
+{% endblock %}

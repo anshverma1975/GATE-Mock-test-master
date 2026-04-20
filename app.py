@@ -19,14 +19,16 @@ with app.app_context():
 
 #to make sure only admins can enter the admin dashboard and its subsequent pages
 def admin_access():
+    print("SESSION:", dict(session))
     if "user_id" not in session:
         flash("Please login first")
-        return redirect(url_for("landing"))
+        return False
 
     if session.get("role") != "admin":
         flash("You are not authorized to access this page")
-        return redirect(url_for("home"))
+        return False
 
+    print("RETURNING TRUE")
     return True
 
 @app.route("/")
@@ -236,9 +238,33 @@ def edit_subject(id):
     subject = Subject.query.get_or_404(id)
     return render_template("edit_subject.html", subject=subject)
     
+@app.route("/admin/subjects/update/<int:id>", methods=["POST"])
+def update_subject(id):
+    if not admin_access():
+        return redirect(url_for("landing"))
 
+    subject = Subject.query.get_or_404(id)
 
+    name = request.form.get("name")
+    description = request.form.get("description")
 
+    if not name:
+        flash("Subject name is required")
+        return redirect(url_for("edit_subject", id=id))
+
+    subject.name = name
+    subject.description = description
+
+    db.session.commit()
+
+    log_activity(
+        type="subject",
+        message=f"Updated subject '{name}'",
+        user_id=session["user_id"]
+    )
+
+    flash("Subject updated successfully")
+    return redirect(url_for("admin_subjects"))
 
 
 
