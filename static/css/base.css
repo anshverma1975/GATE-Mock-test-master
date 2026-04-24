@@ -914,3 +914,75 @@ body {
 .review-card p {
     margin: 4px 0;
 }
+
+/* =========================
+   STUDENT RESULTS PAGE
+========================= */
+
+.results-list {
+    margin-top: 10px;
+}
+
+.result-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background: white;
+    padding: 18px 20px;
+    border-radius: 12px;
+    margin-bottom: 15px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06);
+    transition: 0.2s;
+}
+
+.result-row:hover {
+    transform: translateY(-2px);
+}
+
+.left h3 {
+    margin: 0;
+    font-size: 16px;
+}
+
+.meta {
+    font-size: 13px;
+    color: #777;
+    margin-top: 4px;
+}
+
+.middle {
+    min-width: 80px;
+    text-align: center;
+}
+
+.score {
+    font-size: 18px;
+    font-weight: bold;
+}
+
+.good {
+    color: #28a745;
+}
+
+.avg {
+    color: #ff9800;
+}
+
+.bad {
+    color: #dc3545;
+}
+
+.right {
+    text-align: right;
+}
+
+.btn.view {
+    background: #007bff;
+    color: white;
+    padding: 8px 14px;
+    border-radius: 8px;
+}
+
+.btn.view:hover {
+    background: #0056b3;
+}

@@ -34,10 +34,18 @@
                 Home
             </a>
 
-            <a href="#" class="{% if request.endpoint == 'subjects' %}active{% endif %}">Subjects</a>
-            <a href="#" class="{% if request.endpoint == 'quizzes' %}active{% endif %}">Quizzes</a>
-            <a href="#" class="{% if request.endpoint == 'results' %}active{% endif %}">Results</a>
+            <a href="{{ url_for('student_subjects') }}" class="{% if request.endpoint == 'student_subjects' %}active{% endif %}">
+                Subjects
+            </a>
+            <a href="{{ url_for('student_all_quizzes') }}"
+                class="{% if request.endpoint == 'student_all_quizzes' %}active{% endif %}">
+                Quizzes
+            </a>
+            <a href="{{ url_for('student_results') }}" class="{% if request.endpoint == 'student_results' %}active{% endif %}">
+                Results
+            </a>
             {% endif %}
+            
         </div>
 
         <div class="nav-right">

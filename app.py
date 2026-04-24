@@ -605,5 +605,40 @@ def attempt_result(attempt_id):
         review_data=review_data
     )
 
+
+@app.route("/student/results")
+def student_results():
+    if "user_id" not in session:
+        flash("Please login first")
+        return redirect(url_for("login"))
+
+    if session.get("role") != "student":
+        flash("Unauthorized access")
+        return redirect(url_for("admin_dashboard"))
+
+    attempts = (
+        Attempt.query
+        .filter_by(user_id=session["user_id"])
+        .order_by(Attempt.timestamp.desc())
+        .all()
+    )
+
+    result_data = []
+
+    for a in attempts:
+        quiz = Quiz.query.get(a.quiz_id)
+        subject = Subject.query.get(quiz.subject_id)
+
+        percentage = int((a.score / a.total_marks) * 100) if a.total_marks else 0
+
+        result_data.append({
+            "attempt": a,
+            "quiz": quiz,
+            "subject": subject,
+            "percentage": percentage
+        })
+
+    return render_template("student_results.html", results=result_data)
+
 if __name__ == "__main__":
     app.run(debug=True) 
