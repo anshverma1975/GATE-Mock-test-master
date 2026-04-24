@@ -56,11 +56,14 @@ def home():
     attempted_count = Attempt.query.filter_by(user_id=user_id).count()
 
     activities = (
-        Activity.query
-        .filter_by(user_id=user_id)
-        .order_by(Activity.timestamp.desc())
-        .limit(5)
-        .all()
+    Activity.query
+    .filter_by(user_id=user_id)
+    .filter(Activity.type != "quiz")
+    .filter(Activity.type != "subject")
+    .filter(Activity.type != "admin")
+    .order_by(Activity.timestamp.desc())
+    .limit(5)
+    .all()
     )
 
 
