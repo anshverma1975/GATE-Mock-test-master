@@ -42,12 +42,14 @@ def landing():
 @app.route("/dashboard")
 def home():
     user_id = session.get("user_id")
+
     if not user_id:
         flash("Please login first")
         return redirect(url_for("landing"))
+
     if session.get("role") == "admin":
         return redirect(url_for("admin_dashboard"))
-    
+
     subjects_count = Subject.query.count()
     quizzes_count = Quiz.query.count()
     questions_count = Question.query.count()
@@ -62,11 +64,67 @@ def home():
     )
 
 
+    attempts = Attempt.query.filter_by(user_id=user_id).all()
+
+    total_scored = 0
+    total_possible = 0
+
+    subject_scores = {}   # {subject_name: [scored, total]}
+
+    for attempt in attempts:
+        if not attempt.quiz:
+            continue
+
+        subject_name = attempt.quiz.subject.name
+
+        scored = attempt.score or 0
+        total = attempt.total_marks or 0
+
+        total_scored += scored
+        total_possible += total
+
+        if subject_name not in subject_scores:
+            subject_scores[subject_name] = [0, 0]
+
+        subject_scores[subject_name][0] += scored
+        subject_scores[subject_name][1] += total
+
+    avg_score = 0
+    if total_possible > 0:
+        avg_score = round((total_scored / total_possible) * 100)
+
+    # BEST + WEAK SUBJECT
+    best_subject = "-"
+    weak_subject = "-"
+
+    best_pct = -1
+    weak_pct = 101
+
+    for subject, (scored, total) in subject_scores.items():
+        if total == 0:
+            continue
+
+        pct = (scored / total) * 100
+
+        if pct > best_pct:
+            best_pct = pct
+            best_subject = subject
+
+        if pct < weak_pct:
+            weak_pct = pct
+            weak_subject = subject
+
     return render_template(
-        "user_dashboard.html",subjects_count=subjects_count, quizzes_count=quizzes_count, questions_count=questions_count, attempted_count=attempted_count,activities=activities   
+        "user_dashboard.html",
+        subjects_count=subjects_count,
+        quizzes_count=quizzes_count,
+        questions_count=questions_count,
+        attempted_count=attempted_count,
+        activities=activities,
+        avg_score=avg_score,
+        best_subject=best_subject,
+        weak_subject=weak_subject
     )
-
-
 
 #loginn route
 @app.route('/login', methods=['GET', 'POST'])
@@ -181,6 +239,7 @@ def new_subject():
     if not admin_access():
         return redirect(url_for("landing"))
     return render_template("create_subject.html")
+
 
 @app.route("/admin/subjects/create", methods=["POST"])
 def create_subject():
@@ -451,6 +510,50 @@ def update_question(id):
     return redirect(url_for("edit_quiz", id=question.quiz_id))
 
 
+
+@app.route("/admin/results")
+def admin_results():
+    if not admin_access():
+        return redirect(url_for("home"))
+
+    
+    
+    quiz_id = request.args.get("quiz_id")
+    if quiz_id:
+        attempts = Attempt.query.filter_by(quiz_id=quiz_id).all()
+    else:
+        attempts = Attempt.query.all()
+
+    return render_template("admin_results.html", attempts=attempts)
+
+@app.route("/profile")
+def profile():
+    if "user_id" not in session:
+        flash("Please login first")
+        return redirect(url_for("login"))
+
+    user = User.query.get(session["user_id"])
+    role = session.get("role")
+
+    attempts_count = None
+    avg_score = None
+
+    if role == "student":
+        attempts_count = Attempt.query.filter_by(user_id=user.id).count()
+
+        avg_score = db.session.query(
+            db.func.avg((Attempt.score / Attempt.total_marks) * 100)
+        ).filter_by(user_id=user.id).scalar() or 0
+
+    return render_template(
+        "profile.html",
+        user=user,
+        role=role,
+        attempts_count=attempts_count,
+        avg_score=round(avg_score, 2) if avg_score else None
+    )
+
+
 #user functions daalenge ab 
 
 @app.route("/dashboard/subjects")
@@ -483,7 +586,35 @@ def student_all_quizzes():
 
     return render_template("student_all_quizzes.html", quizzes=quizzes)
 
+@app.route("/change_password", methods=["POST"])
+def change_password():
+    if "user_id" not in session:
+        flash("Please login first")
+        return redirect(url_for("login"))
 
+    user = User.query.get(session["user_id"])
+
+    current = request.form.get("current_password")
+    new = request.form.get("new_password")
+    confirm = request.form.get("confirm_password")
+
+    if user.password != current:
+        flash("Current password is incorrect")
+        return redirect(url_for("profile"))
+
+    if new != confirm:
+        flash("Passwords do not match")
+        return redirect(url_for("profile"))
+
+    if not new or len(new) < 4:
+        flash("Password too weak")
+        return redirect(url_for("profile"))
+
+    user.password = new
+    db.session.commit()
+
+    flash("Password updated successfully")
+    return redirect(url_for("profile"))
 #quiz
 @app.route("/student/quiz/<int:quiz_id>/attempt", methods=["GET", "POST"])
 def attempt_quiz(quiz_id):
@@ -639,6 +770,7 @@ def student_results():
         })
 
     return render_template("student_results.html", results=result_data)
+
 
 if __name__ == "__main__":
     app.run(debug=True) 

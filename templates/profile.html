@@ -1,0 +1,71 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+<div class="profile-container">
+
+    <!-- LEFT CARD -->
+    <div class="profile-card">
+
+        <div class="avatar">
+            {{ user.username[0].upper() }}
+        </div>
+
+        {% if role == "admin" %}
+        <h2>Admin Profile</h2>
+        <p class="role">Manage your account</p>
+        {% else %}
+        <h2>{{ user.username }}</h2>
+        <p class="role">Student Account</p>
+        {% endif %}
+
+        <div class="info-row">
+            <span class="label">Username</span>
+            <span class="value">{{ user.username }}</span>
+        </div>
+
+        {% if role == "student" %}
+        <div class="info-row">
+            <span class="label">Quizzes Attempted</span>
+            <span class="value">{{ attempts_count }}</span>
+        </div>
+
+        <div class="info-row">
+            <span class="label">Average Score</span>
+            <span class="value">{{ avg_score }}%</span>
+        </div>
+        {% endif %}
+
+    </div>
+
+    <div class="password-card">
+
+        <h2>Change Password</h2>
+        <p class="subtitle">Update your account security</p>
+
+        <form method="POST" action="{{ url_for('change_password') }}">
+
+            <div class="field">
+                <label>Current Password</label>
+                <input type="password" name="current_password" required>
+            </div>
+
+            <div class="field">
+                <label>New Password</label>
+                <input type="password" name="new_password" required>
+            </div>
+
+            <div class="field">
+                <label>Confirm Password</label>
+                <input type="password" name="confirm_password" required>
+            </div>
+
+            <button class="btn-update">Update Password</button>
+
+        </form>
+
+    </div>
+
+</div>
+
+{% endblock %}

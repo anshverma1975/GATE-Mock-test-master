@@ -53,7 +53,7 @@
                 {{ session.get('username', 'User') }} ▼
 
                 <div class="dropdown">
-                    <a href="#">Profile</a>
+                    <a href="{{ url_for('profile') }}">Profile</a>
                     <a href="{{ url_for('logout') }}">Logout</a>
                 </div>
             </div>

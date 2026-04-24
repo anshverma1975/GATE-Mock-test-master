@@ -1,0 +1,75 @@
+{% extends "base.html" %}
+
+{% block title %}Admin Results{% endblock %}
+
+{% block content %}
+
+<div class="container">
+
+    <div class="header">
+        <h1>Results</h1>
+        <p>View student quiz attempts</p>
+    </div>
+
+    <!-- FILTERS (UI only for now) -->
+    <div class="filters">
+        <select onchange="location = this.value;">
+            <option value="{{ url_for('admin_results') }}">All Quizzes</option>
+
+            {% for a in attempts %}
+            <option value="{{ url_for('admin_results', quiz_id=a.quiz.id) }}">
+                {{ a.quiz.title }}
+            </option>
+            {% endfor %}
+        </select>
+
+        <input type="text" placeholder="Search by username">
+    </div>
+
+    <table>
+
+        <thead>
+            <tr>
+                <th>Username</th>
+                <th>Quiz</th>
+                <th>Score</th>
+                <th>Percentage</th>
+                <th>Date</th>
+                <th>Time</th>
+            </tr>
+        </thead>
+
+        <tbody>
+
+            {% for a in attempts %}
+
+            {% set percent = (a.score / a.total_marks * 100) if a.total_marks else 0 %}
+
+            <tr>
+                <td>{{ a.user.username }}</td>
+                <td>{{ a.quiz.title }}</td>
+                <td>{{ a.score }} / {{ a.total_marks }}</td>
+
+                <td>
+                    {% if percent >= 75 %}
+                    <span class="percentage high">{{ percent|round }}%</span>
+                    {% elif percent >= 40 %}
+                    <span class="percentage mid">{{ percent|round }}%</span>
+                    {% else %}
+                    <span class="percentage low">{{ percent|round }}%</span>
+                    {% endif %}
+                </td>
+
+                <td>{{ a.timestamp.strftime("%Y-%m-%d") }}</td>
+                <td>{{ a.timestamp.strftime("%H:%M") }}</td>
+            </tr>
+
+            {% endfor %}
+
+        </tbody>
+
+    </table>
+
+</div>
+
+{% endblock %}
