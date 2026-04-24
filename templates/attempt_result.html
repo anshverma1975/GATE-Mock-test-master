@@ -1,0 +1,69 @@
+{% extends "base.html" %}
+{% block content %}
+
+<div class="container">
+
+    <div class="result-card">
+
+        <h2>Quiz Completed</h2>
+
+        <div class="score-circle 
+            {% if percentage < 40 %}score-low
+            {% elif percentage < 70 %}score-medium
+            {% else %}score-high
+            {% endif %}">
+            <span>{{ percentage }}%</span>
+        </div>
+
+        <div class="result-details">
+            <p><strong>Score:</strong> {{ attempt.score }} / {{ attempt.total_marks }}</p>
+            <p><strong>Correct:</strong> {{ correct }}</p>
+            <p><strong>Wrong:</strong> {{ wrong }}</p>
+            <p><strong>Attempted:</strong> {{ attempted }}</p>
+        </div>
+
+        <div class="result-actions">
+            <button class="btn retry" onclick="location.href='{{ url_for('attempt_quiz', quiz_id=quiz.id) }}'">
+                Retry Quiz
+            </button>
+
+            <button class="btn dashboard" onclick="location.href='{{ url_for('home') }}'">
+                Back to Dashboard
+            </button>
+        </div>
+
+    </div>
+
+    <div class="review-section">
+        <h3>Review Answers</h3>
+
+        {% for item in review_data %}
+        <div class="review-card {{ 'correct' if item.is_correct else 'wrong' }}">
+
+            <p><strong>Q{{ loop.index }}:</strong> {{ item.question.question_text }}</p>
+
+            <p>
+                Your Answer:
+                {% if item.selected %}
+                {{ item.question['option' ~ item.selected] }}
+                {% if item.is_correct %} ✅ {% else %} ❌ {% endif %}
+                {% else %}
+                Not Attempted ❌
+                {% endif %}
+            </p>
+
+            {% if not item.is_correct %}
+            <p>
+                Correct Answer:
+                {{ item.question['option' ~ item.correct] }}
+            </p>
+            {% endif %}
+
+        </div>
+        {% endfor %}
+
+    </div>
+
+</div>
+
+{% endblock %}

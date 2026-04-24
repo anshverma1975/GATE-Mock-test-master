@@ -791,3 +791,126 @@ body {
     border-radius: 20px;
     white-space: nowrap;
 }
+
+
+/* container already exists, just ensure spacing */
+.container {
+    max-width: 900px;
+    margin: 30px auto;
+}
+
+
+.result-card {
+    background: white;
+    padding: 30px;
+    border-radius: 14px;
+    text-align: center;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+    margin-bottom: 30px;
+}
+
+.result-card h2 {
+    margin-bottom: 10px;
+}
+
+
+.score-circle {
+    width: 120px;
+    height: 120px;
+    border-radius: 50%;
+    margin: 20px auto;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 26px;
+    font-weight: bold;
+    color: white;
+    background: #28a745;
+}
+
+.score-low {
+    background: #dc3545;
+}
+
+.score-medium {
+    background: #ff9800;
+}
+
+.score-high {
+    background: #28a745;
+}
+
+
+.result-details {
+    margin-top: 10px;
+}
+
+.result-details p {
+    margin: 5px 0;
+    font-size: 14px;
+}
+
+
+.result-actions {
+    margin-top: 20px;
+}
+
+.result-actions .btn {
+    padding: 10px 16px;
+    margin: 5px;
+    border-radius: 8px;
+    border: none;
+    cursor: pointer;
+}
+
+.retry {
+    background: #007bff;
+    color: white;
+}
+
+.retry:hover {
+    background: #0056b3;
+}
+
+.dashboard {
+    background: #6c757d;
+    color: white;
+}
+
+.dashboard:hover {
+    background: #545b62;
+}
+
+
+.review-section {
+    background: white;
+    padding: 20px;
+    border-radius: 14px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+}
+
+.review-section h3 {
+    margin-bottom: 15px;
+}
+
+
+.review-card {
+    padding: 15px;
+    border-radius: 10px;
+    margin-bottom: 12px;
+    font-size: 14px;
+}
+
+.review-card.correct {
+    background: #e6f4ea;
+    border-left: 5px solid #28a745;
+}
+
+.review-card.wrong {
+    background: #fdecea;
+    border-left: 5px solid #dc3545;
+}
+
+.review-card p {
+    margin: 4px 0;
+}

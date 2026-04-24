@@ -501,23 +501,25 @@ def attempt_quiz(quiz_id):
     if request.method == "POST":
         score = 0
 
+        # ✅ calculate score
         for q in questions:
             selected = request.form.get(f"question_{q.id}")
             if selected and int(selected) == q.correct_option:
                 score += (q.marks if q.marks else 1)
 
+        # ✅ create attempt
         attempt = Attempt(
             user_id=session["user_id"],
             quiz_id=quiz_id,
             score=score,
             total_questions=len(questions),
             total_marks=sum(q.marks for q in questions)
-
         )
 
         db.session.add(attempt)
         db.session.commit()
 
+        # ✅ store answers
         for q in questions:
             selected = request.form.get(f"question_{q.id}")
             answer = AttemptAnswer(
@@ -526,21 +528,82 @@ def attempt_quiz(quiz_id):
                 selected_option=int(selected) if selected else None
             )
             db.session.add(answer)
-            db.session.commit()
-            flash("Quiz submitted successfully")
-            return redirect(url_for("attempt_result", attempt_id=attempt.id))
-        
-        log_activity(
-                type="attempt",
-                message=f"User {session['username']} scored {score}/{sum(q.marks for q in questions)} on {quiz.title}",
-                user_id=session["user_id"]
-                )
 
+        db.session.commit()
+
+        # ✅ log
+        log_activity(
+            type="attempt",
+            message=f"User {session['username']} scored {score}/{sum(q.marks for q in questions)} on {quiz.title}",
+            user_id=session["user_id"]
+        )
+
+        flash("Quiz submitted successfully")
+
+        return redirect(url_for("attempt_result", attempt_id=attempt.id))
+
+    # ✅ GET request → show page
     return render_template("attempt_quiz.html", quiz=quiz, questions=questions)
 
+@app.route("/student/attempt/<int:attempt_id>/result")
+def attempt_result(attempt_id):
+    if "user_id" not in session:
+        flash("Please login first")
+        return redirect(url_for("login"))
 
+    attempt = Attempt.query.get_or_404(attempt_id)
 
+    if attempt.user_id != session["user_id"]:
+        flash("Unauthorized access")
+        return redirect(url_for("home"))
 
+    quiz = Quiz.query.get(attempt.quiz_id)
+    questions = Question.query.filter_by(quiz_id=quiz.id).all()
+
+    answer_map = {
+        a.question_id: a.selected_option
+        for a in attempt.answers
+    }
+
+    correct = 0
+    wrong = 0
+    attempted = 0
+
+    review_data = []
+
+    for q in questions:
+        selected = answer_map.get(q.id)
+
+        if selected:
+            attempted += 1
+
+        is_correct = selected == q.correct_option
+
+        if is_correct:
+            correct += 1
+        else:
+            if selected:
+                wrong += 1
+
+        review_data.append({
+            "question": q,
+            "selected": selected,
+            "correct": q.correct_option,
+            "is_correct": is_correct
+        })
+
+    percentage = int((attempt.score / attempt.total_marks) * 100) if attempt.total_marks else 0
+
+    return render_template(
+        "attempt_result.html",
+        quiz=quiz,
+        attempt=attempt,
+        correct=correct,
+        wrong=wrong,
+        attempted=attempted,
+        percentage=percentage,
+        review_data=review_data
+    )
 
 if __name__ == "__main__":
     app.run(debug=True) 
