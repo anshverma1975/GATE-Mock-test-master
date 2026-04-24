@@ -1,0 +1,55 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+<div class="container">
+
+    <div class="header">
+        <h1>All Quizzes</h1>
+        <p class="subtitle">Browse and attempt quizzes across all subjects</p>
+    </div>
+
+    <div class="top-bar">
+        <input type="text" placeholder="Search quizzes...">
+
+        <select>
+            <option>All Subjects</option>
+            {% for q in quizzes %}
+            <option>{{ q.subject.name }}</option>
+            {% endfor %}
+        </select>
+    </div>
+
+    <div class="quiz-grid">
+
+        {% for quiz in quizzes %}
+        <div class="quiz-card">
+
+            <div class="quiz-top">
+                <span class="tag easy">Easy</span>
+                <span class="subject">{{ quiz.subject.name }}</span>
+            </div>
+
+            <h3>{{ quiz.title }}</h3>
+
+            <p class="small">Questions: {{ quiz.questions|length }}</p>
+            <p class="small">Attempts: {{ quiz.attempts|length }}</p>
+
+            <div class="quiz-bottom">
+                <span class="small">
+                    Created: {{ quiz.created_at.strftime("%d %b %Y") }}
+                </span>
+
+                <button class="btn attempt" onclick='location.href="{{ url_for("attempt_quiz", quiz_id=quiz.id) }}"'>
+                    Attempt
+                </button>
+            </div>
+
+        </div>
+        {% endfor %}
+
+    </div>
+
+</div>
+
+{% endblock %}

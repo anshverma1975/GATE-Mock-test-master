@@ -1,0 +1,55 @@
+{% extends "base.html" %}
+{% block navbar %}{% endblock %}
+{% block content %}
+
+<form method="POST">
+
+    <div class="attempt-wrapper">
+
+        <div class="quiz-header">
+            <h2>{{ quiz.title }}</h2>
+        </div>
+
+        {% for q in questions %}
+        <div class="question-card">
+
+            <div class="question-top">
+                <h3>Q{{ loop.index }}. {{ q.question_text }}</h3>
+                <span class="marks">
+                    {{ q.marks if q.marks else 1 }} marks
+                </span>
+            </div>
+
+            <label class="option">
+                <input type="radio" name="question_{{ q.id }}" value="1" required>
+                {{ q.option1 }}
+            </label>
+
+            <label class="option">
+                <input type="radio" name="question_{{ q.id }}" value="2">
+                {{ q.option2 }}
+            </label>
+
+            <label class="option">
+                <input type="radio" name="question_{{ q.id }}" value="3">
+                {{ q.option3 }}
+            </label>
+
+            <label class="option">
+                <input type="radio" name="question_{{ q.id }}" value="4">
+                {{ q.option4 }}
+            </label>
+
+        </div>
+        {% endfor %}
+
+    </div>
+
+    <div class="submit-bar">
+        <span>Attempt all questions before submitting</span>
+        <button type="submit" class="submit-btn">Submit Quiz</button>
+    </div>
+
+</form>
+
+{% endblock %}

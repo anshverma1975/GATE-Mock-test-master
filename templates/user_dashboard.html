@@ -34,7 +34,9 @@
             <h3>Quizzes</h3>
             <p>Attempt quizzes by topic</p>
             <div class="actions">
-                <button onclick="location.href='#'">View</button>
+                <button onclick='location.href="{{ url_for("student_all_quizzes") }}"'>
+                    View
+                </button>
             </div>
         </div>
 

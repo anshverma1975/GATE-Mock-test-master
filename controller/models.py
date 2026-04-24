@@ -44,9 +44,9 @@ class Attempt(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     user_id = db.Column(db.Integer, db.ForeignKey("users.id"), nullable=False)
     quiz_id = db.Column(db.Integer, db.ForeignKey("quizzes.id"), nullable=False)
-    score = db.Column(db.Integer)            # marks earned
-    total_questions = db.Column(db.Integer)  # count of questions
-    total_marks = db.Column(db.Integer)      # sum of all question marks
+    score = db.Column(db.Integer)           
+    total_questions = db.Column(db.Integer)  
+    total_marks = db.Column(db.Integer)     
     timestamp = db.Column(db.DateTime, default=datetime.utcnow)
     answers = db.relationship("AttemptAnswer", backref="attempt", lazy=True)
 class AttemptAnswer(db.Model):

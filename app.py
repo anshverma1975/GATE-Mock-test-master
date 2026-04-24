@@ -1,7 +1,7 @@
 from flask import Flask, render_template, request, url_for , redirect, flash, session
 from controller.config import Config
 from controller.database import db
-from controller.models import User, Subject, Quiz, Question, Attempt, Activity
+from controller.models import User, Subject, Quiz, Question, Attempt, Activity, AttemptAnswer
 
 
 app = Flask(__name__, template_folder="templates", static_folder="static")
@@ -369,6 +369,7 @@ def add_question(quiz_id):
     option3 = request.form.get("option3")
     option4 = request.form.get("option4")
     correct = int(request.form.get("correct_option"))
+    marks = int(request.form.get("marks") or 1)
 
     if not text or not correct:
         flash("Question and correct answer required")
@@ -381,7 +382,8 @@ def add_question(quiz_id):
         option2=option2,
         option3=option3,
         option4=option4,
-        correct_option=correct
+        correct_option=correct,
+        marks=marks
     )
 
     db.session.add(question)
@@ -471,20 +473,70 @@ def student_subject_quizzes(subject_id):
 
     return render_template("student_subject_quizzes.html",subject=subject,quizzes=quizzes)
 
-@app.route("/student/quiz/<int:quiz_id>/attempt")
+@app.route("/dashboard/quizzes")
+def student_all_quizzes():
+    if "user_id" not in session:
+        flash("Please login first")
+        return redirect(url_for("login"))
+
+    quizzes = Quiz.query.order_by(Quiz.created_at.desc()).all()
+
+    return render_template("student_all_quizzes.html", quizzes=quizzes)
+
+
+#quiz
+@app.route("/student/quiz/<int:quiz_id>/attempt", methods=["GET", "POST"])
 def attempt_quiz(quiz_id):
     if "user_id" not in session:
         flash("Please login first")
         return redirect(url_for("login"))
 
+    if session.get("role") != "student":
+        flash("Unauthorized access")
+        return redirect(url_for("admin_dashboard"))
+
     quiz = Quiz.query.get_or_404(quiz_id)
     questions = Question.query.filter_by(quiz_id=quiz_id).all()
 
-    return render_template(
-        "attempt_quiz.html",
-        quiz=quiz,
-        questions=questions
-    )
+    if request.method == "POST":
+        score = 0
+
+        for q in questions:
+            selected = request.form.get(f"question_{q.id}")
+            if selected and int(selected) == q.correct_option:
+                score += (q.marks if q.marks else 1)
+
+        attempt = Attempt(
+            user_id=session["user_id"],
+            quiz_id=quiz_id,
+            score=score,
+            total_questions=len(questions),
+            total_marks=sum(q.marks for q in questions)
+
+        )
+
+        db.session.add(attempt)
+        db.session.commit()
+
+        for q in questions:
+            selected = request.form.get(f"question_{q.id}")
+            answer = AttemptAnswer(
+                attempt_id=attempt.id,
+                question_id=q.id,
+                selected_option=int(selected) if selected else None
+            )
+            db.session.add(answer)
+            db.session.commit()
+            flash("Quiz submitted successfully")
+            return redirect(url_for("attempt_result", attempt_id=attempt.id))
+        
+        log_activity(
+                type="attempt",
+                message=f"User {session['username']} scored {score}/{sum(q.marks for q in questions)} on {quiz.title}",
+                user_id=session["user_id"]
+                )
+
+    return render_template("attempt_quiz.html", quiz=quiz, questions=questions)
 
 
 
