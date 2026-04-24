@@ -447,5 +447,48 @@ def update_question(id):
 
     flash("Question updated successfully")
     return redirect(url_for("edit_quiz", id=question.quiz_id))
+
+
+#user functions daalenge ab 
+
+@app.route("/dashboard/subjects")
+def student_subjects():
+    user_id = session.get("user_id")
+    if not user_id:
+        return redirect(url_for("login"))
+    
+    subjects = Subject.query.all()
+    return render_template("student_subjects.html", subjects=subjects)
+
+@app.route("/student/subjects/<int:subject_id>/quizzes")
+def student_subject_quizzes(subject_id):
+    if "user_id" not in session:
+        flash("Please login first")
+        return redirect(url_for("login"))
+
+    subject = Subject.query.get_or_404(subject_id)
+    quizzes = Quiz.query.filter_by(subject_id=subject_id).all()
+
+    return render_template("student_subject_quizzes.html",subject=subject,quizzes=quizzes)
+
+@app.route("/student/quiz/<int:quiz_id>/attempt")
+def attempt_quiz(quiz_id):
+    if "user_id" not in session:
+        flash("Please login first")
+        return redirect(url_for("login"))
+
+    quiz = Quiz.query.get_or_404(quiz_id)
+    questions = Question.query.filter_by(quiz_id=quiz_id).all()
+
+    return render_template(
+        "attempt_quiz.html",
+        quiz=quiz,
+        questions=questions
+    )
+
+
+
+
+
 if __name__ == "__main__":
     app.run(debug=True) 

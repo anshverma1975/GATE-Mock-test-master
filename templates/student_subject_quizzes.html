@@ -1,0 +1,70 @@
+{% extends "base.html" %}
+{% block title %}Quizzes{% endblock %}
+
+{% block content %}
+
+<div class="container">
+
+    <div class="header">
+        <div>
+            <h1>{{ subject.name }} Quizzes</h1>
+            <p class="subtitle">Select a quiz to attempt</p>
+        </div>
+    </div>
+
+    <button class="back-btn" onclick="location.href='{{ url_for('student_subjects') }}'">
+        ← Back to Subjects
+    </button>
+
+    <div class="quiz-grid">
+
+        {% if quizzes %}
+        {% for q in quizzes %}
+        <div class="quiz-card">
+
+            <div class="quiz-top">
+
+                <span class="tag 
+                    {% if q.questions|length <= 10 %}easy
+                    {% elif q.questions|length <= 15 %}medium
+                    {% else %}hard
+                    {% endif %}
+                ">
+                    {% if q.questions|length <= 10 %} Easy {% elif q.questions|length <=15 %} Medium {% else %} Hard {%
+                        endif %} </span>
+
+                        <span class="meta">
+                            {{ q.questions|length }} Questions
+                        </span>
+
+            </div>
+
+            <h3>{{ q.title }}</h3>
+
+            <p>
+                {{ q.description if q.description else "No description available" }}
+            </p>
+
+            <div class="quiz-bottom">
+
+                <span class="small">
+                    Created: {{ q.created_at.strftime('%d %b %Y') }}
+                </span>
+
+                <button class="btn attempt" onclick="location.href='{{ url_for('attempt_quiz', quiz_id=q.id) }}'">
+                    Attempt
+                </button>
+
+            </div>
+
+        </div>
+        {% endfor %}
+        {% else %}
+        <p>No quizzes available.</p>
+        {% endif %}
+
+    </div>
+
+</div>
+
+{% endblock %}

@@ -520,3 +520,169 @@ body {
     font-weight: bold;
     background: #eaf7ee;
 }
+
+/* SUBJECT PAGE ONLY */
+
+.top-bar input {
+    width: 100%;
+    padding: 12px;
+    border-radius: 10px;
+    border: 1px solid #ccc;
+    margin-bottom: 20px;
+    outline: none;
+}
+
+.subject-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 20px;
+}
+
+.subject-card {
+    background: white;
+    padding: 20px;
+    border-radius: 14px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.06);
+    transition: 0.2s ease;
+}
+
+.subject-card:hover {
+    transform: translateY(-3px);
+}
+
+.subject-top {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 10px;
+}
+
+.badge {
+    font-size: 12px;
+    padding: 4px 10px;
+    border-radius: 20px;
+    color: white;
+    font-weight: bold;
+    background: #007bff;
+}
+
+.count {
+    font-size: 12px;
+    color: #777;
+}
+
+.subject-card h3 {
+    margin: 5px 0;
+}
+
+.subject-card p {
+    color: #555;
+    font-size: 14px;
+    margin-bottom: 15px;
+}
+
+.subject-bottom {
+    text-align: right;
+}
+
+.btn.view {
+    padding: 8px 14px;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    background: #007bff;
+    color: white;
+}
+
+.btn.view:hover {
+    background: #0056b3;
+}
+
+/* student quizz page */
+
+.back-btn {
+    margin-bottom: 20px;
+    padding: 8px 12px;
+    border: none;
+    background: #ddd;
+    border-radius: 8px;
+    cursor: pointer;
+}
+
+.back-btn:hover {
+    background: #ccc;
+}
+
+.quiz-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 20px;
+}
+
+.quiz-card {
+    background: white;
+    padding: 20px;
+    border-radius: 14px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.06);
+}
+
+.quiz-top {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 10px;
+}
+
+.tag {
+    font-size: 12px;
+    padding: 4px 10px;
+    border-radius: 20px;
+    color: white;
+    font-weight: bold;
+}
+
+.easy {
+    background: #28a745;
+}
+
+.medium {
+    background: #ff9800;
+}
+
+.hard {
+    background: #dc3545;
+}
+
+.meta {
+    font-size: 12px;
+    color: #777;
+}
+
+.quiz-card h3 {
+    margin: 5px 0;
+}
+
+.quiz-card p {
+    color: #555;
+    font-size: 14px;
+}
+
+.quiz-bottom {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-top: 15px;
+}
+
+.small {
+    font-size: 12px;
+    color: #888;
+}
+
+.btn.attempt {
+    background: #007bff;
+    color: white;
+}
+
+.btn.attempt:hover {
+    background: #0056b3;
+}

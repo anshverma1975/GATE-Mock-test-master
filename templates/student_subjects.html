@@ -1,0 +1,58 @@
+{% extends "base.html" %}
+{% block title %}Subjects{% endblock %}
+
+{% block content %}
+
+<div class="container">
+
+    <div class="header">
+        <div>
+            <h1>Subjects</h1>
+            <p class="subtitle">Choose a subject to explore quizzes</p>
+        </div>
+    </div>
+
+    <div class="top-bar">
+        <input type="text" placeholder="Search subjects..." id="searchInput">
+    </div>
+
+    <div class="subject-grid">
+
+        {% for s in subjects %}
+        <div class="subject-card">
+
+            <div class="subject-top">
+
+                <div class="badge">
+                    {{ s.name[:4] | upper }}
+                </div>
+
+                <span class="count">
+                    {{ s.quizzes|length }} quizzes
+                </span>
+
+            </div>
+
+            <h3>{{ s.name }}</h3>
+
+            <p>
+                {{ s.description if s.description else "No description available" }}
+            </p>
+
+            <div class="subject-bottom">
+
+                <button class="btn view"
+                    onclick="location.href='{{ url_for('student_subject_quizzes', subject_id=s.id) }}'">
+                    View Subject
+                </button>
+
+            </div>
+
+        </div>
+        {% endfor %}
+
+    </div>
+
+</div>
+
+{% endblock %}
