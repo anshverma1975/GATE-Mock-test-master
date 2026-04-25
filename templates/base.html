@@ -26,7 +26,7 @@
             <a href="{{ url_for('admin_quizzes') }}" class="{% if request.endpoint == 'admin_quizzes' %}active{% endif %}">
                 Quizzes
             </a>
-            <a href="#" class="{% if request.endpoint == 'admin_results' %}active{% endif %}">
+            <a href="{{ url_for('admin_results') }}" class="{% if request.endpoint == 'admin_results' %}active{% endif %}">
                 Results
             </a>
             {% else %}
