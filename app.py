@@ -632,6 +632,11 @@ def attempt_quiz(quiz_id):
     quiz = Quiz.query.get_or_404(quiz_id)
     questions = Question.query.filter_by(quiz_id=quiz_id).all()
 
+    if not questions:
+        flash("The quiz is not available for now , please try later")
+        return redirect(url_for("student_all_quizzes"))
+
+
     if request.method == "POST":
         score = 0
 
